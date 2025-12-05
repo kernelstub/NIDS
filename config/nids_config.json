@@ -1,0 +1,67 @@
+{
+    "network": {
+        "interface": "any",
+        "promiscuous_mode": true,
+        "capture_timeout_ms": 1000,
+        "packet_buffer_size": 65536,
+        "filter": {
+            "enabled": true,
+            "protocols": ["tcp", "udp", "icmp"],
+            "excluded_ips": []
+        }
+    },
+    "detection": {
+        "signature_based": {
+            "enabled": true,
+            "rules_update_interval_hours": 24,
+            "port_scan": {
+                "threshold": 100,
+                "time_window_seconds": 60
+            },
+            "syn_flood": {
+                "threshold": 1000,
+                "time_window_seconds": 60
+            },
+            "sql_injection": {
+                "enabled": true,
+                "patterns": [
+                    "(?i)\\b(union|select|insert|update|delete|drop)\\b",
+                    "(?i)'\\s*or\\s*'1'\\s*=\\s*'1"
+                ]
+            }
+        },
+        "anomaly_based": {
+            "enabled": true,
+            "baseline_period_hours": 24,
+            "threshold_multiplier": 2.0
+        }
+    },
+    "logging": {
+        "level": "info",
+        "file": {
+            "path": "logs/nids.log",
+            "max_size_mb": 100,
+            "max_files": 10,
+            "rotation": true
+        },
+        "console": {
+            "enabled": true,
+            "color": true
+        },
+        "alerts": {
+            "path": "logs/alerts.json",
+            "max_size_mb": 500,
+            "rotation": true
+        }
+    },
+    "performance": {
+        "thread_pool_size": 4,
+        "packet_queue_size": 10000,
+        "batch_size": 100
+    },
+    "security": {
+        "encrypt_logs": false,
+        "hash_algorithm": "sha256",
+        "max_packet_payload_log": 1024
+    }
+}
